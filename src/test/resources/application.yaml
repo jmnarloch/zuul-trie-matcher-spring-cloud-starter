@@ -1,0 +1,10 @@
+zuul:
+  ignoredServices: '*'
+  routes:
+    resource:
+      path: /api/**
+      serviceId: rest-service
+    oauth2:
+      path: /uaa/**
+      serviceId: oauth2-service
+      stripPrefix: false

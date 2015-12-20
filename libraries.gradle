@@ -1,0 +1,17 @@
+ext {
+
+    libraries = [
+
+            springBootConfigurationProcessor: 'org.springframework.boot:spring-boot-configuration-processor:1.2.5.RELEASE',
+
+            springCloudZuul                 : 'org.springframework.cloud:spring-cloud-starter-zuul:1.0.3.RELEASE',
+
+            springBootWeb                   : 'org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE',
+            springBootTest                  : 'org.springframework.boot:spring-boot-starter-test:1.2.5.RELEASE',
+
+            trove                           : 'net.sf.trove4j:trove4j:3.0.3',
+
+            junit                           : 'junit:junit:4.12',
+            mockito                         : 'org.mockito:mockito-all:1.10.19'
+    ]
+}
