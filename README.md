@@ -32,7 +32,7 @@ public static class Application {
 
     @Bean
     public RouteMatcher routeMatcher() {
-        return new TrieRouteMatcher(() -> Tries.newCharMapTrie());
+        return new TrieRouteMatcher(() -> Tries.newCharHashMapTrie());
     }
 }
 ```
