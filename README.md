@@ -26,7 +26,7 @@ Enable the Zuul proxy with `@EnableZuulProxyMatcher` - use this annotation as a 
 the only requirement to use this component is to register a concrete bean of type `RouteMatcher`
 
 ```java
-@EnableZuulProxyStore
+@EnableZuulProxyMatcher
 @SpringBootApplication
 public static class Application {
 
