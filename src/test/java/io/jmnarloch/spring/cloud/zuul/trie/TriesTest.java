@@ -50,7 +50,7 @@ public class TriesTest {
     public void shouldCreateCharHashMapTrie() {
 
         // when
-        Trie<String> trie = Tries.newCharMapTrie();
+        Trie<String> trie = Tries.newCharHashMapTrie();
 
         // then
         assertNotNull(trie);

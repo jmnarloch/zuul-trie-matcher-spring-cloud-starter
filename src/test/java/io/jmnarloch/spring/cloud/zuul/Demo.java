@@ -69,7 +69,7 @@ public class Demo {
             return new TrieRouteMatcher(new TrieRouteMatcher.TrieSupplier() {
                 @Override
                 public <T> Trie<T> createTrie() {
-                    return Tries.newCharMapTrie();
+                    return Tries.newCharHashMapTrie();
                 }
             });
         }

@@ -47,7 +47,7 @@ public final class Tries {
      * @param <T> the element type
      * @return the instance of {@link CharHashMapTrie}
      */
-    public static <T> CharHashMapTrie<T> newCharMapTrie() {
+    public static <T> CharHashMapTrie<T> newCharHashMapTrie() {
         return new CharHashMapTrie<T>();
     }
 
