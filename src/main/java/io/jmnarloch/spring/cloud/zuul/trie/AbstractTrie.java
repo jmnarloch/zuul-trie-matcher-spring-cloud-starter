@@ -48,7 +48,7 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      */
     @Override
     public void put(String key, T value) {
-        Assert.hasLength(key, "Key must be not empty string.");
+        Assert.hasLength(key, "Key must be not null or not empty string.");
 
         root = put(getRoot(), key, value);
     }
@@ -58,7 +58,7 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      */
     @Override
     public boolean contains(String key) {
-        Assert.hasLength(key, "Key must be not empty string.");
+        Assert.hasLength(key, "Key must be not null or not empty string.");
 
         return get(key) != null;
     }
@@ -68,7 +68,7 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      */
     @Override
     public T get(String key) {
-        Assert.hasLength(key, "Key must be not empty string.");
+        Assert.hasLength(key, "Key must be not null or not empty string.");
 
         return get(getRoot(), key);
     }
@@ -78,7 +78,7 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      */
     @Override
     public T prefix(String key) {
-        Assert.hasLength(key, "Key must be not empty string.");
+        Assert.hasLength(key, "Key must be not null or not empty string.");
 
         return prefix(getRoot(), key);
     }

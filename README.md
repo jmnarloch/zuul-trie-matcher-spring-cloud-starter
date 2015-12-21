@@ -43,6 +43,15 @@ The Trie is a R way tree that is designed for efficient string searches, perfect
 route path matching. For most effective use the Trie is being build on application context refresh and used for
 queries afterwards.
 
+At this moment this component defines three different implementation of the Trie, all of which differs slightly
+in performance, but far most with the memory consumption.
+
+The available Trie implementations are:
+
+* CharArrayTrie
+* HashMapTrie
+* CharHashMapTrie - that uses Trove TCharObjectHashMap
+
 ## License
 
 Apache 2.0
