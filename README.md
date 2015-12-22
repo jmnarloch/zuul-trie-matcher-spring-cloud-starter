@@ -56,12 +56,12 @@ The available Trie implementations are:
 
 ## Performance characteristics
 
-The standard implementation of [ProxyRouteLocator]() iterates over every `ZuulProperties.ZuulRoute` in order to find the
+The standard implementation of [ProxyRouteLocator](https://github.com/spring-cloud/spring-cloud-netflix/blob/master/spring-cloud-netflix-core/src/main/java/org/springframework/cloud/netflix/zuul/filters/ProxyRouteLocator.java) iterates over every `ZuulProperties.ZuulRoute` in order to find the
 first one matching the request URI. If we denote N - as number of routes and M as the maximum path length then we can
 say that finding the path takes O(NM) time in worst case.
 
-The proposed alternative will replace this path finding by performing prefix search on the build Trie tree, with
-running time of O(M) in worst case.
+The proposed alternative will replace this path finding by performing prefix search on the Trie tree, with
+running time of O(M) in worst case, the performance gains are made in exchange of extra memory usage.
 
 Also the side effect of using the Trie is that it allows to define overlapping paths for instance:
 
