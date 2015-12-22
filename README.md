@@ -37,6 +37,8 @@ public static class Application {
 }
 ```
 
+Except to that everything is generally the same as when used with standard Zuul proxy.
+
 ## Implementation details
 
 The Trie is a R way tree that is designed for efficient string searches, perfectly fitting for use cases like Zuul
@@ -51,6 +53,24 @@ The available Trie implementations are:
 * CharArrayTrie
 * HashMapTrie
 * CharHashMapTrie - that uses Trove TCharObjectHashMap
+
+## Performance characteristics
+
+The standard implementation of [ProxyRouteLocator]() iterates over every `ZuulProperties.ZuulRoute` in order to find the
+first one matching the request URI. If we denote N - as number of routes and M as the maximum path length then we can
+say that finding the path takes O(NM) time in worst case.
+
+The proposed alternative will replace this path finding by performing prefix search on the build Trie tree, with
+running time of O(M) in worst case.
+
+Also the side effect of using the Trie is that it allows to define overlapping paths for instance:
+
+* /uaa/**
+* /uaa/account/**
+
+As already stated the standard implementation would chose either of those paths depending on the order they have been
+defined in properties file, the Trie tree in contrary would find the best matching route i.e.
+for path /uaa/authorize, /uaa/** would be used and for /uaa/account/j.doe, /uaa/account/** is going to be matched.
 
 ## License
 
