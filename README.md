@@ -37,7 +37,7 @@ public static class Application {
 }
 ```
 
-Except to that everything is generally the same as when used with standard Zuul proxy.
+Except for that everything is generally the same as when used with standard Zuul proxy.
 
 ## Implementation details
 
