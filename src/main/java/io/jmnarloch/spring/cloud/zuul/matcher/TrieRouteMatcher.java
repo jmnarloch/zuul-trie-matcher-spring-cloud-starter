@@ -32,7 +32,7 @@ public class TrieRouteMatcher implements RouteMatcher {
     /**
      * The suffix used for wildcard route matching.
      */
-    private static final String WILDCARD = "/**";
+    private static final String WILDCARD = "**";
 
     /**
      * The instance of {@link TrieSupplier} used for instantiating new Tries.
@@ -42,11 +42,12 @@ public class TrieRouteMatcher implements RouteMatcher {
     /**
      * Holds the reference to the Trie instance.
      */
-    private final AtomicReference<Trie<ProxyRouteLocator.ProxyRouteSpec>> trie =
-            new AtomicReference<Trie<ProxyRouteLocator.ProxyRouteSpec>>();
+    private final AtomicReference<Trie<ProxyRouteSpecEntry>> trie =
+            new AtomicReference<Trie<ProxyRouteSpecEntry>>();
 
     /**
      * Creates new instance of {@link TrieRouteMatcher} with specific supplier.
+     *
      * @param trieSupplier the Trie instance supplier
      */
     public TrieRouteMatcher(TrieSupplier trieSupplier) {
@@ -60,10 +61,12 @@ public class TrieRouteMatcher implements RouteMatcher {
     @Override
     public void setRoutes(Map<String, ProxyRouteLocator.ProxyRouteSpec> routes) {
 
-        final Trie<ProxyRouteLocator.ProxyRouteSpec> trie = createTrie();
+        final Trie<ProxyRouteSpecEntry> trie = createTrie();
         for (Map.Entry<String, ProxyRouteLocator.ProxyRouteSpec> route : routes.entrySet()) {
-            final String path = path(route.getKey());
-            trie.put(path, route.getValue());
+            trie.put(
+                    path(route.getKey()),
+                    new ProxyRouteSpecEntry(route.getKey(), route.getValue(), isWildcard(route.getKey()))
+            );
         }
         this.trie.set(trie);
     }
@@ -73,8 +76,14 @@ public class TrieRouteMatcher implements RouteMatcher {
      */
     @Override
     public ProxyRouteLocator.ProxyRouteSpec getMatchingRoute(String path) {
-
-        return trie.get().prefix(path);
+        final ProxyRouteSpecEntry matching = trie.get().prefix(path);
+        if (matching == null) {
+            return null;
+        } else if (!matching.isWildcard() && !matchesExact(path, matching.getPath())) {
+            return null;
+        } else {
+            return matching.getProxyRouteSpec();
+        }
     }
 
     /**
@@ -84,10 +93,31 @@ public class TrieRouteMatcher implements RouteMatcher {
      * @return the normalized path
      */
     private String path(String path) {
-        if(path.endsWith(WILDCARD)) {
+        if (path.endsWith(WILDCARD)) {
             path = path.substring(0, path.length() - WILDCARD.length());
         }
         return path;
+    }
+
+    /**
+     * Returns whether the actual request path matches the configured route.
+     *
+     * @param pathSpec the configured path
+     * @param path     the request path
+     * @return true if path matches
+     */
+    private boolean matchesExact(String pathSpec, String path) {
+        return pathSpec.equals(path);
+    }
+
+    /**
+     * Returns whether
+     *
+     * @param key
+     * @return
+     */
+    private boolean isWildcard(String key) {
+        return key.endsWith(WILDCARD);
     }
 
     /**
@@ -95,8 +125,71 @@ public class TrieRouteMatcher implements RouteMatcher {
      *
      * @return the trie instance
      */
-    private Trie<ProxyRouteLocator.ProxyRouteSpec> createTrie() {
+    private Trie<ProxyRouteSpecEntry> createTrie() {
         return trieSupplier.createTrie();
+    }
+
+    /**
+     * A simple wrapper on the Trie value entry allowing to associate additional information with the route specs.
+     *
+     * @author Jakub Narloch
+     */
+    private static class ProxyRouteSpecEntry {
+
+        /**
+         * The route path.
+         */
+        private final String path;
+
+        /**
+         * The route spec.
+         */
+        private final ProxyRouteLocator.ProxyRouteSpec proxyRouteSpec;
+
+        /**
+         * Whether the route is a wildcard.
+         */
+        private final boolean wildcard;
+
+        /**
+         * Creates new instance of {@link ProxyRouteSpecEntry}
+         *
+         * @param path           the route path
+         * @param proxyRouteSpec the route spec
+         * @param wildcard       whether the route is wildcard
+         */
+        public ProxyRouteSpecEntry(String path, ProxyRouteLocator.ProxyRouteSpec proxyRouteSpec, boolean wildcard) {
+            this.path = path;
+            this.proxyRouteSpec = proxyRouteSpec;
+            this.wildcard = wildcard;
+        }
+
+        /**
+         * Returns the route path.
+         *
+         * @return the route path
+         */
+        public String getPath() {
+            return path;
+        }
+
+        /**
+         * Retrieves the route spec
+         *
+         * @return the route spec
+         */
+        public ProxyRouteLocator.ProxyRouteSpec getProxyRouteSpec() {
+            return proxyRouteSpec;
+        }
+
+        /**
+         * Returns whether the path is a wildcard.
+         *
+         * @return the path wildcard
+         */
+        public boolean isWildcard() {
+            return wildcard;
+        }
     }
 
     /**

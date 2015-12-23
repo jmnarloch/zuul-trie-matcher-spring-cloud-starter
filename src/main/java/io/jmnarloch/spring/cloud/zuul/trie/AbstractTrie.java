@@ -98,8 +98,8 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
             next = node.getNext(c);
             if (next == null) {
                 next = createTrieNode();
+                node.setNext(c, next);
             }
-            node.setNext(c, next);
             node = next;
             index++;
         }
