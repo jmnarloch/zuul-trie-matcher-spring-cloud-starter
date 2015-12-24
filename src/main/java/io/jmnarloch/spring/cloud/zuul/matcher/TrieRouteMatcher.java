@@ -107,7 +107,7 @@ public class TrieRouteMatcher implements RouteMatcher {
      * @return true if path matches
      */
     private boolean matchesExact(String pathSpec, String path) {
-        return pathSpec.equals(path);
+        return pathSpec.length() == path.length();
     }
 
     /**
