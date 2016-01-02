@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,6 +39,19 @@ public final class Tries {
      */
     public static <T> CharArrayTrie<T> newCharArrayTrie() {
         return new CharArrayTrie<T>();
+    }
+
+    /**
+     * Creates new instance of {@link CharArrayTrie} with node capacity. The capacity specifies how many distinct
+     * characters can be stored by individual node, for instance to map only ASCII characters specify the capacity
+     * of 128, in case of extended ASCII 256.
+     *
+     * @param <T>      the element type
+     * @param capacity the trie node character capacity
+     * @return the instance of {@link CharArrayTrie}
+     */
+    public static <T> CharArrayTrie<T> newCharArrayTrie(int capacity) {
+        return new CharArrayTrie<T>(capacity);
     }
 
     /**

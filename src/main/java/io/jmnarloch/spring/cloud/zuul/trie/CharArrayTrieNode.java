@@ -35,9 +35,22 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
     /**
      * Creates new instance of {@link CharArrayTrieNode} class.
      */
-    @SuppressWarnings("unchecked")
     public CharArrayTrieNode() {
-        this.next = (CharArrayTrieNode<T>[]) new CharArrayTrieNode[R];
+        this(R);
+    }
+
+    /**
+     * Creates new instance of {@link CharArrayTrieNode} class with specific capacity.
+     *
+     * @param capacity the maximum number of distinct characters stored by this node
+     */
+    @SuppressWarnings("unchecked")
+    public CharArrayTrieNode(int capacity) {
+        if(capacity < 0 || capacity > R) {
+            throw new IllegalArgumentException(String.format("Capacity exceeds bounds must be in range [0, %d]", R));
+        }
+
+        this.next = (CharArrayTrieNode<T>[]) new CharArrayTrieNode[capacity];
     }
 
     /**
@@ -69,8 +82,12 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      *
      * @param c the character
      * @return the character code point
+     * @throws IllegalArgumentException if character exceeds the node capacity
      */
     private int getIndex(char c) {
+        if(c >= next.length) {
+            throw new IllegalArgumentException(String.format("The character %c exceeds bounds.", c));
+        }
         return c;
     }
 }

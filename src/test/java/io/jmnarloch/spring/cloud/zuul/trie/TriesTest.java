@@ -37,6 +37,16 @@ public class TriesTest {
     }
 
     @Test
+    public void shouldCreateCharArrayTrieWithCapacity() {
+
+        // when
+        Trie<String> trie = Tries.newCharArrayTrie(127);
+
+        // then
+        assertNotNull(trie);
+    }
+
+    @Test
     public void shouldCreateHashMapTrie() {
 
         // when

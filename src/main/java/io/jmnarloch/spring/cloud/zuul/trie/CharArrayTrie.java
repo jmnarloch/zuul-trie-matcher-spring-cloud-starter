@@ -33,4 +33,18 @@ public class CharArrayTrie<T> extends AbstractTrie<T, CharArrayTrieNode<T>> {
             }
         });
     }
+
+    /**
+     * Creates new instance of {@link CharArrayTrie} with specific capacity.
+     *
+     * @param capacity the node capacity
+     */
+    public CharArrayTrie(final int capacity) {
+        super(new TrieNodeFactory<T, CharArrayTrieNode<T>>() {
+            @Override
+            public CharArrayTrieNode<T> createNode() {
+                return new CharArrayTrieNode<T>(capacity);
+            }
+        });
+    }
 }
