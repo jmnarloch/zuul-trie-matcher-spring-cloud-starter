@@ -16,7 +16,7 @@
 package io.jmnarloch.spring.cloud.zuul.trie;
 
 /**
- * A character array backed Trie tree.
+ * A array backed Trie tree.
  *
  * @author Jakub Narloch
  */

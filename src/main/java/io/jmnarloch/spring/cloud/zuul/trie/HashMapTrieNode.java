@@ -28,7 +28,33 @@ class HashMapTrieNode<T> extends AbstractTrieNode<T, HashMapTrieNode<T>> {
     /**
      * The {@link Map} of children nodes.
      */
-    private final Map<Character, HashMapTrieNode<T>> next = new HashMap<Character, HashMapTrieNode<T>>();
+    private final Map<Character, HashMapTrieNode<T>> next;
+
+    /**
+     * Creates new instance of {@link HashMapTrieNode}.
+     */
+    public HashMapTrieNode() {
+        next = new HashMap<Character, HashMapTrieNode<T>>();
+    }
+
+    /**
+     * Creates new instance of {@link HashMapTrieNode} with initial capacity.
+     *
+     * @param initialCapacity the initial capacity
+     */
+    public HashMapTrieNode(int initialCapacity) {
+        next = new HashMap<Character, HashMapTrieNode<T>>(initialCapacity);
+    }
+
+    /**
+     * Creates new instance of {@link HashMapTrieNode} with initial capacity.
+     *
+     * @param initialCapacity the initial capacity
+     * @param loadFactor the load factor
+     */
+    public HashMapTrieNode(int initialCapacity, float loadFactor) {
+        next = new HashMap<Character, HashMapTrieNode<T>>(initialCapacity, loadFactor);
+    }
 
     /**
      * {@inheritDoc}

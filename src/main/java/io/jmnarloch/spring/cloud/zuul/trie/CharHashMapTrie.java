@@ -33,4 +33,33 @@ public class CharHashMapTrie<T> extends AbstractTrie<T, CharHashMapTrieNode<T>> 
             }
         });
     }
+
+    /**
+     * Creates new instance of {@link CharHashMapTrie} class with initial capacity.
+     *
+     * @param initialCapacity the initial capacity
+     */
+    public CharHashMapTrie(final int initialCapacity) {
+        super(new TrieNodeFactory<T, CharHashMapTrieNode<T>>() {
+            @Override
+            public CharHashMapTrieNode<T> createNode() {
+                return new CharHashMapTrieNode<T>(initialCapacity);
+            }
+        });
+    }
+
+    /**
+     * Creates new instance of {@link CharHashMapTrie} class with initial capacity and load factor.
+     *
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
+     */
+    public CharHashMapTrie(final int initialCapacity, final float loadFactor) {
+        super(new TrieNodeFactory<T, CharHashMapTrieNode<T>>() {
+            @Override
+            public CharHashMapTrieNode<T> createNode() {
+                return new CharHashMapTrieNode<T>(initialCapacity, loadFactor);
+            }
+        });
+    }
 }

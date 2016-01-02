@@ -47,10 +47,50 @@ public class TriesTest {
     }
 
     @Test
+    public void shouldCreateHashMapTrieWithInitialCapacity() {
+
+        // when
+        Trie<String> trie = Tries.newHashMapTrie(8);
+
+        // then
+        assertNotNull(trie);
+    }
+
+    @Test
+    public void shouldCreateHashMapTrieWithInitialCapacityAndLoadFactor() {
+
+        // when
+        Trie<String> trie = Tries.newHashMapTrie(8, 0.5f);
+
+        // then
+        assertNotNull(trie);
+    }
+
+    @Test
     public void shouldCreateCharHashMapTrie() {
 
         // when
         Trie<String> trie = Tries.newCharHashMapTrie();
+
+        // then
+        assertNotNull(trie);
+    }
+
+    @Test
+    public void shouldCreateCharHashMapTrieWithInitialCapacity() {
+
+        // when
+        Trie<String> trie = Tries.newCharHashMapTrie(16);
+
+        // then
+        assertNotNull(trie);
+    }
+
+    @Test
+    public void shouldCreateCharHashMapTrieWithInitialCapacityAndLoadFactor() {
+
+        // when
+        Trie<String> trie = Tries.newCharHashMapTrie(16, 0.75f);
 
         // then
         assertNotNull(trie);

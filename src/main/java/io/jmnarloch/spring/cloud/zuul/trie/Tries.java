@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -52,6 +52,29 @@ public final class Tries {
     }
 
     /**
+     * Creates new instance of {@link CharHashMapTrie} with initial capacity.
+     *
+     * @param <T>             the element type
+     * @param initialCapacity the initial capacity
+     * @return the instance of {@link CharHashMapTrie}
+     */
+    public static <T> CharHashMapTrie<T> newCharHashMapTrie(int initialCapacity) {
+        return new CharHashMapTrie<T>(initialCapacity);
+    }
+
+    /**
+     * Creates new instance of {@link CharHashMapTrie} with initial capacity and load factor.
+     *
+     * @param <T>             the element type
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
+     * @return the instance of {@link CharHashMapTrie}
+     */
+    public static <T> CharHashMapTrie<T> newCharHashMapTrie(int initialCapacity, float loadFactor) {
+        return new CharHashMapTrie<T>(initialCapacity, loadFactor);
+    }
+
+    /**
      * Creates new instance of {@link HashMapTrie}.
      *
      * @param <T> the element type
@@ -59,5 +82,28 @@ public final class Tries {
      */
     public static <T> HashMapTrie<T> newHashMapTrie() {
         return new HashMapTrie<T>();
+    }
+
+    /**
+     * Creates new instance of {@link HashMapTrie} with initial capacity.
+     *
+     * @param <T>             the element type
+     * @param initialCapacity the initial capacity
+     * @return the instance of {@link HashMapTrie}
+     */
+    public static <T> HashMapTrie<T> newHashMapTrie(int initialCapacity) {
+        return new HashMapTrie<T>(initialCapacity);
+    }
+
+    /**
+     * Creates new instance of {@link HashMapTrie} with initial capacity and load factor.
+     *
+     * @param <T>             the element type
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
+     * @return the instance of {@link HashMapTrie}
+     */
+    public static <T> HashMapTrie<T> newHashMapTrie(int initialCapacity, float loadFactor) {
+        return new HashMapTrie<T>(initialCapacity, loadFactor);
     }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,33 @@ class CharHashMapTrieNode<T> extends AbstractTrieNode<T, CharHashMapTrieNode<T>>
     /**
      * The map of children nodes.
      */
-    private final TCharObjectMap<CharHashMapTrieNode<T>> next = new TCharObjectHashMap<CharHashMapTrieNode<T>>();
+    private final TCharObjectMap<CharHashMapTrieNode<T>> next;
+
+    /**
+     * Creates new instance of {@link CharHashMapTrieNode}.
+     */
+    public CharHashMapTrieNode() {
+        next = new TCharObjectHashMap<CharHashMapTrieNode<T>>();
+    }
+
+    /**
+     * Creates new instance of {@link CharHashMapTrieNode} with specific initial capacity.
+     *
+     * @param initialCapacity the initial capacity
+     */
+    public CharHashMapTrieNode(int initialCapacity) {
+        next = new TCharObjectHashMap<CharHashMapTrieNode<T>>(initialCapacity);
+    }
+
+    /**
+     * Creates new instance of {@link CharHashMapTrieNode} with specific initial capacity and load factor.
+     *
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
+     */
+    public CharHashMapTrieNode(int initialCapacity, float loadFactor) {
+        next = new TCharObjectHashMap<CharHashMapTrieNode<T>>(initialCapacity, loadFactor);
+    }
 
     /**
      * {@inheritDoc}
