@@ -17,6 +17,9 @@ package io.jmnarloch.spring.cloud.zuul.trie;
 
 import org.springframework.util.Assert;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 /**
  * The base class for all {@link Trie} instances.
  *
@@ -41,6 +44,23 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      */
     public AbstractTrie(TrieNodeFactory<T, N> nodeFactory) {
         this.nodeFactory = nodeFactory;
+        this.root = createTrieNode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int size() {
+        return getRoot().getSize();
     }
 
     /**
@@ -57,7 +77,7 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(String key) {
+    public boolean containsKey(String key) {
         Assert.hasLength(key, "Key must be not null or not empty string.");
 
         return get(key) != null;
@@ -89,7 +109,8 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
             node = createTrieNode();
         }
         final N root = node;
-
+        final Deque<N> stack = new LinkedList<N>();
+        stack.push(node);
         N next;
         int index = 0;
 
@@ -101,9 +122,17 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
                 node.setNext(c, next);
             }
             node = next;
+            stack.push(node);
             index++;
         }
+        final boolean replaced = node.hasValue();
         node.setValue(value);
+        if(!replaced) {
+            while (!stack.isEmpty()) {
+                node = stack.pop();
+                node.setSize(node.getSize() + 1);
+            }
+        }
         return root;
     }
 
@@ -155,6 +184,10 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
     }
 
     interface TrieNode<T, N extends TrieNode<T, N>> {
+
+        void setSize(int size);
+
+        int getSize();
 
         void setNext(char c, N next);
 

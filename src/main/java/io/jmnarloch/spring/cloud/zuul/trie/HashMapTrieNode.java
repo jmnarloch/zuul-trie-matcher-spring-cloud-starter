@@ -23,17 +23,12 @@ import java.util.Map;
  *
  * @author Jakub Narloch
  */
-class HashMapTrieNode<T> implements AbstractTrie.TrieNode<T, HashMapTrieNode<T>> {
+class HashMapTrieNode<T> extends AbstractTrieNode<T, HashMapTrieNode<T>> {
 
     /**
      * The {@link Map} of children nodes.
      */
     private final Map<Character, HashMapTrieNode<T>> next = new HashMap<Character, HashMapTrieNode<T>>();
-
-    /**
-     * The node value.
-     */
-    private T value;
 
     /**
      * {@inheritDoc}
@@ -49,29 +44,5 @@ class HashMapTrieNode<T> implements AbstractTrie.TrieNode<T, HashMapTrieNode<T>>
     @Override
     public HashMapTrieNode<T> getNext(char c) {
         return next.get(c);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(T value) {
-        this.value = value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public T getValue() {
-        return value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasValue() {
-        return getValue() != null;
     }
 }

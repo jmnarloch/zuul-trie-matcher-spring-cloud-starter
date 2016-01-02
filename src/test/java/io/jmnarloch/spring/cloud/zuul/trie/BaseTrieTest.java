@@ -38,49 +38,105 @@ public abstract class BaseTrieTest {
     public void setUp() throws Exception {
 
         instance = createTrie();
-        final Set<String> routes = getRoutes();
-        for (String route : routes) {
-            instance.put(route, route);
+        for (String value : getValues()) {
+            instance.put(value, value);
         }
     }
 
     @Test
-    public void shouldFindAllMatchingRoutes() throws Exception {
+    public void shouldBeEmpty() {
 
-        for (String route : getRoutes()) {
+        // given
+        instance = createTrie();
+
+        // expect
+        assertTrue(instance.isEmpty());
+    }
+
+    @Test
+    public void shouldHaveSizeOfZero() {
+
+        // given
+        instance = createTrie();
+
+        // expect
+        assertEquals(0, instance.size());
+    }
+
+    @Test
+    public void shouldReturnsCorrectTrieSize() {
+
+        // expect
+        assertEquals(getValues().size(), instance.size());
+    }
+
+    @Test
+    public void shouldNotAlterSizeOnDuplicates() {
+
+        // given
+        for (String value : getValues()) {
+            instance.put(value, value);
+        }
+
+        // expect
+        assertEquals(getValues().size(), instance.size());
+    }
+
+    @Test
+    public void shouldFindAllMatchingKeys() throws Exception {
+
+        for (String value : getValues()) {
             // when
-            final String result = instance.get(route);
+            final String result = instance.get(value);
 
             // then
-            assertEquals(route, result);
+            assertEquals(value, result);
         }
     }
 
     @Test
-    public void shouldFindAllPrefixRoutes() throws Exception {
+    public void shouldFindAllPrefixKeys() throws Exception {
 
-        for (String route : getRoutes()) {
+        for (String value : getValues()) {
             // when
-            final String result = instance.prefix(route);
+            final String result = instance.prefix(value);
 
             // then
-            assertEquals(route, result);
+            assertEquals(value, result);
         }
     }
 
     @Test
-    public void shouldFindAllExistingRoutes() throws Exception {
+    public void shouldFindAllExistingKeys() throws Exception {
 
-        for (String route : getRoutes()) {
+        for (String value : getValues()) {
             // when
-            final boolean exists = instance.contains(route);
+            final boolean exists = instance.containsKey(value);
 
             // then
             assertTrue(exists);
         }
     }
 
-    protected Set<String> getRoutes() {
+    @Test
+    public void shouldReplaceKeyValues() {
+
+        // given
+        final String replaced = "replaced";
+        for (String value : getValues()) {
+            instance.put(value, replaced);
+        }
+
+        for (String value : getValues()) {
+            // when
+            final String result = instance.get(value);
+
+            // then
+            assertEquals(replaced, result);
+        }
+    }
+
+    protected Set<String> getValues() {
 
         return new HashSet<String>(Arrays.asList(
                 "/uaa/**",

@@ -20,7 +20,7 @@ package io.jmnarloch.spring.cloud.zuul.trie;
  *
  * @author Jakub Narloch
  */
-class CharArrayTrieNode<T> implements AbstractTrie.TrieNode<T, CharArrayTrieNode<T>> {
+class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
 
     /**
      * The number of distinct children - resembles the 2 byte char distinct values.
@@ -31,11 +31,6 @@ class CharArrayTrieNode<T> implements AbstractTrie.TrieNode<T, CharArrayTrieNode
      * The array of child nodes.
      */
     private CharArrayTrieNode<T>[] next;
-
-    /**
-     * The node value.
-     */
-    private T value;
 
     /**
      * Creates new instance of {@link CharArrayTrieNode} class.
@@ -62,33 +57,6 @@ class CharArrayTrieNode<T> implements AbstractTrie.TrieNode<T, CharArrayTrieNode
     public CharArrayTrieNode<T> getNext(char c) {
 
         return this.next[getIndex(c)];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(T value) {
-
-        this.value = value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public T getValue() {
-
-        return value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasValue() {
-
-        return getValue() != null;
     }
 
     /**

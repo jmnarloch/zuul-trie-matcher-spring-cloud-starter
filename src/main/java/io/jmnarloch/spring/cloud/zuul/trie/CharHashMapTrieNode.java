@@ -23,17 +23,12 @@ import gnu.trove.map.hash.TCharObjectHashMap;
  *
  * @author Jakub Narloch
  */
-class CharHashMapTrieNode<T> implements AbstractTrie.TrieNode<T, CharHashMapTrieNode<T>> {
+class CharHashMapTrieNode<T> extends AbstractTrieNode<T, CharHashMapTrieNode<T>> {
 
     /**
      * The map of children nodes.
      */
     private final TCharObjectMap<CharHashMapTrieNode<T>> next = new TCharObjectHashMap<CharHashMapTrieNode<T>>();
-
-    /**
-     * The node value.
-     */
-    private T value;
 
     /**
      * {@inheritDoc}
@@ -50,29 +45,5 @@ class CharHashMapTrieNode<T> implements AbstractTrie.TrieNode<T, CharHashMapTrie
     @Override
     public CharHashMapTrieNode<T> getNext(char c) {
         return next.get(c);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setValue(T value) {
-        this.value = value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public T getValue() {
-        return value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasValue() {
-        return getValue() != null;
     }
 }

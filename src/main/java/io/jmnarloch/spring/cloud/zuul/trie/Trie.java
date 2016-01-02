@@ -23,6 +23,20 @@ package io.jmnarloch.spring.cloud.zuul.trie;
 public interface Trie<T> {
 
     /**
+     * Returns whether the trie does not contain any entries.
+     *
+     * @return true if trie does not have any entries
+     */
+    boolean isEmpty();
+
+    /**
+     * Returns the total number of entries.
+     *
+     * @return the total number of entries
+     */
+    int size();
+
+    /**
      * Associated the value with specific key.
      *
      * @param key   the key that the value will be associated
@@ -38,7 +52,7 @@ public interface Trie<T> {
      * @return true if key exists, false otherwise
      * @throws IllegalArgumentException if {@code key} is {@code null} or empty string
      */
-    boolean contains(String key);
+    boolean containsKey(String key);
 
     /**
      * Returns the values associated with the specific key, or {@code null} otherwise.
@@ -50,7 +64,7 @@ public interface Trie<T> {
     T get(String key);
 
     /**
-     * Returns any value that is a prefix to specified key.
+     * Returns the longest common prefix of specified key.
      *
      * @param key the key to search
      * @return the prefix key value or {@code null} if nothing was found
