@@ -77,9 +77,8 @@ public class TrieRouteMatcher implements RouteMatcher {
     @Override
     public ProxyRouteLocator.ProxyRouteSpec getMatchingRoute(String path) {
         final ProxyRouteSpecEntry matching = trie.get().prefix(path);
-        if (matching == null) {
-            return null;
-        } else if (!matching.isWildcard() && !matchesExact(path, matching.getPath())) {
+        if (matching == null
+                || !matching.isWildcard() && !matchesExact(path, matching.getPath())) {
             return null;
         } else {
             return matching.getProxyRouteSpec();
@@ -93,7 +92,7 @@ public class TrieRouteMatcher implements RouteMatcher {
      * @return the normalized path
      */
     private String path(String path) {
-        if (path.endsWith(WILDCARD)) {
+        if (isWildcard(path)) {
             path = path.substring(0, path.length() - WILDCARD.length());
         }
         return path;
@@ -102,22 +101,22 @@ public class TrieRouteMatcher implements RouteMatcher {
     /**
      * Returns whether the actual request path matches the configured route.
      *
-     * @param pathSpec the configured path
-     * @param path     the request path
-     * @return true if path matches
+     * @param expected the configured path
+     * @param actual   the request path
+     * @return true if actual path matches the expectation
      */
-    private boolean matchesExact(String pathSpec, String path) {
-        return pathSpec.length() == path.length();
+    private boolean matchesExact(String expected, String actual) {
+        return expected.length() == actual.length();
     }
 
     /**
-     * Returns whether
+     * Returns whether the specific path contains a wildcard.
      *
-     * @param key
-     * @return
+     * @param path the path
+     * @return whether path contains wildcard
      */
-    private boolean isWildcard(String key) {
-        return key.endsWith(WILDCARD);
+    private boolean isWildcard(String path) {
+        return path.endsWith(WILDCARD);
     }
 
     /**
