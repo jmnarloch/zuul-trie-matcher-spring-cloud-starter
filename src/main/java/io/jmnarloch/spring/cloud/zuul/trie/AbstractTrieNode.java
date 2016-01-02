@@ -52,6 +52,14 @@ public abstract class AbstractTrieNode<T, N extends AbstractTrieNode<T, N>> impl
      * {@inheritDoc}
      */
     @Override
+    public boolean isEmpty() {
+        return getSize() == 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setValue(T value) {
         this.value = value;
     }
@@ -70,5 +78,13 @@ public abstract class AbstractTrieNode<T, N extends AbstractTrieNode<T, N>> impl
     @Override
     public boolean hasValue() {
         return getValue() != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeValue() {
+        value = null;
     }
 }

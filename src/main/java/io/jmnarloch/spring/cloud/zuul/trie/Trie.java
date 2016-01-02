@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,9 +41,10 @@ public interface Trie<T> {
      *
      * @param key   the key that the value will be associated
      * @param value the value to insert
+     * @return the previous value associated with the specific key
      * @throws IllegalArgumentException if {@code key} is {@code null} or empty string
      */
-    void put(String key, T value);
+    T put(String key, T value);
 
     /**
      * Returns whether the trie contains the specific key.
@@ -71,4 +72,13 @@ public interface Trie<T> {
      * @throws IllegalArgumentException if {@code key} is {@code null} or empty string
      */
     T prefix(String key);
+
+    /**
+     * Removes the value associated with specific key.
+     *
+     * @param key the key to remove
+     * @return the removed value associated with the specific key
+     * @throws IllegalArgumentException if {@code key} is {@code null} or empty string
+     */
+    T remove(String key);
 }

@@ -67,10 +67,10 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
      * {@inheritDoc}
      */
     @Override
-    public void put(String key, T value) {
+    public T put(String key, T value) {
         Assert.hasLength(key, "Key must be not null or not empty string.");
 
-        root = put(getRoot(), key, value);
+        return put(getRoot(), key, value);
     }
 
     /**
@@ -103,12 +103,16 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
         return prefix(getRoot(), key);
     }
 
-    private N put(N node, String key, T value) {
+    @Override
+    public T remove(String key) {
+        Assert.hasLength(key, "Key must be not null or not empty string.");
 
-        if (node == null) {
-            node = createTrieNode();
-        }
-        final N root = node;
+        return remove(getRoot(), key);
+    }
+
+    private T put(N root, String key, T value) {
+
+        N node = root;
         final Deque<N> stack = new LinkedList<N>();
         stack.push(node);
         N next;
@@ -126,14 +130,17 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
             index++;
         }
         final boolean replaced = node.hasValue();
+        final T old = node.getValue();
         node.setValue(value);
-        if(!replaced) {
-            while (!stack.isEmpty()) {
-                node = stack.pop();
-                node.setSize(node.getSize() + 1);
-            }
+        if(replaced) {
+            return old;
         }
-        return root;
+
+        while (!stack.isEmpty()) {
+            node = stack.pop();
+            node.setSize(node.getSize() + 1);
+        }
+        return null;
     }
 
     private T get(N node, String key) {
@@ -166,6 +173,42 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
         return value;
     }
 
+    protected T remove(N root, String key) {
+
+        int index = 0;
+        N node = root;
+        N next;
+        final Deque<N> stack = new LinkedList<N>();
+
+        while (index < key.length()) {
+            stack.push(node);
+            next = node.getNext(getChar(key, index));
+            if(next == null) {
+                return null;
+            }
+            node = next;
+            index++;
+        }
+        if(!node.hasValue()) {
+            return null;
+        }
+        final T value = node.getValue();
+        node.setSize(node.getSize() - 1);
+        node.removeValue();
+        index = key.length() - 1;
+        while(!stack.isEmpty()) {
+            final char c = getChar(key, index);
+            node = stack.pop();
+
+            if(node.getNext(c).isEmpty()) {
+                node.removeNext(c);
+            }
+            node.setSize(node.getSize() - 1);
+            index--;
+        }
+        return value;
+    }
+
     private char getChar(String key, int index) {
         return key.charAt(index);
     }
@@ -185,6 +228,8 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
 
     interface TrieNode<T, N extends TrieNode<T, N>> {
 
+        boolean isEmpty();
+
         void setSize(int size);
 
         int getSize();
@@ -193,10 +238,14 @@ abstract class AbstractTrie<T, N extends AbstractTrie.TrieNode<T, N>> implements
 
         N getNext(char c);
 
+        void removeNext(char c);
+
         void setValue(T value);
 
         T getValue();
 
         boolean hasValue();
+
+        void removeValue();
     }
 }

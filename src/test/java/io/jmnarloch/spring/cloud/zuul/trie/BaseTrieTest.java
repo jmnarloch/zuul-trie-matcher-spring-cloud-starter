@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -124,7 +125,9 @@ public abstract class BaseTrieTest {
         // given
         final String replaced = "replaced";
         for (String value : getValues()) {
-            instance.put(value, replaced);
+            String prev = instance.put(value, replaced);
+
+            assertEquals(value, prev);
         }
 
         for (String value : getValues()) {
@@ -133,6 +136,22 @@ public abstract class BaseTrieTest {
 
             // then
             assertEquals(replaced, result);
+        }
+    }
+
+    @Test
+    public void shouldRemoveAllEntries() {
+
+        // when
+        for (String value : getValues()) {
+            instance.remove(value);
+        }
+
+        // then
+        assertTrue(instance.isEmpty());
+        assertTrue(instance.size() == 0);
+        for (String value : getValues()) {
+            assertNull(instance.get(value));
         }
     }
 

@@ -35,7 +35,6 @@ class CharHashMapTrieNode<T> extends AbstractTrieNode<T, CharHashMapTrieNode<T>>
      */
     @Override
     public void setNext(char c, CharHashMapTrieNode<T> next) {
-
         this.next.put(c, next);
     }
 
@@ -45,5 +44,13 @@ class CharHashMapTrieNode<T> extends AbstractTrieNode<T, CharHashMapTrieNode<T>>
     @Override
     public CharHashMapTrieNode<T> getNext(char c) {
         return next.get(c);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeNext(char c) {
+        next.remove(c);
     }
 }

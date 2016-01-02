@@ -37,7 +37,6 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      */
     @SuppressWarnings("unchecked")
     public CharArrayTrieNode() {
-
         this.next = (CharArrayTrieNode<T>[]) new CharArrayTrieNode[R];
     }
 
@@ -46,7 +45,6 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      */
     @Override
     public void setNext(char c, CharArrayTrieNode<T> next) {
-
         this.next[getIndex(c)] = next;
     }
 
@@ -55,8 +53,15 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      */
     @Override
     public CharArrayTrieNode<T> getNext(char c) {
+        return next[getIndex(c)];
+    }
 
-        return this.next[getIndex(c)];
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeNext(char c) {
+        next[getIndex(c)] = null;
     }
 
     /**
@@ -66,7 +71,6 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      * @return the character code point
      */
     private int getIndex(char c) {
-
         return c;
     }
 }
