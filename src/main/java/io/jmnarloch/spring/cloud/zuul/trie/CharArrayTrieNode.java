@@ -66,6 +66,9 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      */
     @Override
     public CharArrayTrieNode<T> getNext(char c) {
+        if(!isValid(c)) {
+            return null;
+        }
         return next[getIndex(c)];
     }
 
@@ -85,9 +88,19 @@ class CharArrayTrieNode<T> extends AbstractTrieNode<T, CharArrayTrieNode<T>> {
      * @throws IllegalArgumentException if character exceeds the node capacity
      */
     private int getIndex(char c) {
-        if(c >= next.length) {
+        if(!isValid(c)) {
             throw new IllegalArgumentException(String.format("The character %c exceeds bounds.", c));
         }
         return c;
+    }
+
+    /**
+     * Returns whether the character is in bounds for this node.
+     *
+     * @param c the character
+     * @return true if character is in bounds
+     */
+    private boolean isValid(char c) {
+        return c < next.length;
     }
 }
