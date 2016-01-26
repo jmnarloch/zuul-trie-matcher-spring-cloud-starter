@@ -68,7 +68,7 @@ public class TrieRouteMatcher implements RouteMatcher {
                     new ProxyRouteSpecEntry(route.getKey(), route.getValue(), isWildcard(route.getKey()))
             );
         }
-        this.trie.set(trie);
+        this.trie.lazySet(trie);
     }
 
     /**
