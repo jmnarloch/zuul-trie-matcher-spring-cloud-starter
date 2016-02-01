@@ -32,6 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Demonstrates the usage of this component.
@@ -53,11 +54,14 @@ public class Demo {
         final String path = "/uaa/authorize";
 
         // when
-        final ProxyRouteLocator.ProxyRouteSpec route = proxyRouteLocator.getMatchingRoute(path);
+            final ProxyRouteLocator.ProxyRouteSpec route = proxyRouteLocator.getMatchingRoute(path);
 
         // then
         assertNotNull(route);
-        assertEquals("/uaa/**", route.getPath());
+        assertEquals("oauth2", route.getId());
+        assertEquals("/uaa/authorize", route.getPath());
+        assertEquals("oauth2-service", route.getLocation());
+        assertTrue(route.getPrefix().isEmpty());
     }
 
     @EnableZuulProxyMatcher

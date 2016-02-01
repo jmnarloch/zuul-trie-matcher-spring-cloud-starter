@@ -19,7 +19,7 @@ import io.jmnarloch.spring.cloud.zuul.trie.Trie;
 import io.jmnarloch.spring.cloud.zuul.trie.Tries;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.cloud.netflix.zuul.filters.ProxyRouteLocator;
+import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +54,7 @@ public class TrieRouteMatcherTest {
         final String path = "/accounts/";
 
         // when
-        final ProxyRouteLocator.ProxyRouteSpec result = instance.getMatchingRoute(path);
+        final ZuulProperties.ZuulRoute result = instance.getMatchingRoute(path);
 
         // then
         assertNull(result);
@@ -66,7 +66,7 @@ public class TrieRouteMatcherTest {
         final String path = "/account/details";
 
         // when
-        final ProxyRouteLocator.ProxyRouteSpec result = instance.getMatchingRoute(path);
+        final ZuulProperties.ZuulRoute result = instance.getMatchingRoute(path);
 
         // then
         assertNotNull(result);
@@ -78,7 +78,7 @@ public class TrieRouteMatcherTest {
         final String path = "/uaa/authorize";
 
         // when
-        final ProxyRouteLocator.ProxyRouteSpec result = instance.getMatchingRoute(path);
+        final ZuulProperties.ZuulRoute result = instance.getMatchingRoute(path);
 
         // then
         assertNull(result);
@@ -90,7 +90,7 @@ public class TrieRouteMatcherTest {
         final String path = "/uaa/";
 
         // when
-        final ProxyRouteLocator.ProxyRouteSpec result = instance.getMatchingRoute(path);
+        final ZuulProperties.ZuulRoute result = instance.getMatchingRoute(path);
 
         // then
         assertNotNull(result);
@@ -102,18 +102,18 @@ public class TrieRouteMatcherTest {
         final String path = "/uaa";
 
         // when
-        final ProxyRouteLocator.ProxyRouteSpec result = instance.getMatchingRoute(path);
+        final ZuulProperties.ZuulRoute result = instance.getMatchingRoute(path);
 
         // then
         assertNull(result);
     }
 
-    protected Map<String, ProxyRouteLocator.ProxyRouteSpec> getRoutes() {
+    protected Map<String, ZuulProperties.ZuulRoute> getRoutes() {
 
-        final Map<String, ProxyRouteLocator.ProxyRouteSpec> routes =
-                new HashMap<String, ProxyRouteLocator.ProxyRouteSpec>();
-        routes.put("/uaa/", new ProxyRouteLocator.ProxyRouteSpec("uaa", "/uaa", "/uaa", "", null));
-        routes.put("/account/**", new ProxyRouteLocator.ProxyRouteSpec("account", "/account", "/account", "", null));
+        final Map<String, ZuulProperties.ZuulRoute> routes =
+                new HashMap<String, ZuulProperties.ZuulRoute>();
+        routes.put("/uaa/", new ZuulProperties.ZuulRoute("uaa", "/uaa", "uaa", "/uaa", false, null));
+        routes.put("/account/**", new ZuulProperties.ZuulRoute("account", "/account", "account", "/account", false, null));
         return routes;
     }
 }

@@ -15,7 +15,7 @@
  */
 package io.jmnarloch.spring.cloud.zuul.matcher;
 
-import org.springframework.cloud.netflix.zuul.filters.ProxyRouteLocator;
+import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 
 import java.util.Map;
 
@@ -31,12 +31,13 @@ public interface RouteMatcher {
      *
      * @param routes the routes map
      */
-    void setRoutes(Map<String, ProxyRouteLocator.ProxyRouteSpec> routes);
+    void setRoutes(Map<String, ZuulProperties.ZuulRoute> routes);
 
     /**
-     * Retrieves the route spec for given path.
+     * Retrieves the route specification for given path.
+     *
      * @param path the route path
-     * @return the matching route spec
+     * @return the matching route spec, or null if no routes matches the path
      */
-    ProxyRouteLocator.ProxyRouteSpec getMatchingRoute(String path);
+    ZuulProperties.ZuulRoute getMatchingRoute(String path);
 }

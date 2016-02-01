@@ -16,7 +16,7 @@
 package io.jmnarloch.spring.cloud.zuul.matcher;
 
 import io.jmnarloch.spring.cloud.zuul.trie.Trie;
-import org.springframework.cloud.netflix.zuul.filters.ProxyRouteLocator;
+import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.util.Assert;
 
 import java.util.Map;
@@ -42,8 +42,8 @@ public class TrieRouteMatcher implements RouteMatcher {
     /**
      * Holds the reference to the Trie instance.
      */
-    private final AtomicReference<Trie<ProxyRouteSpecEntry>> trie =
-            new AtomicReference<Trie<ProxyRouteSpecEntry>>();
+    private final AtomicReference<Trie<ZuulRouteEntry>> trie =
+            new AtomicReference<Trie<ZuulRouteEntry>>();
 
     /**
      * Creates new instance of {@link TrieRouteMatcher} with specific supplier.
@@ -59,13 +59,13 @@ public class TrieRouteMatcher implements RouteMatcher {
      * {@inheritDoc}
      */
     @Override
-    public void setRoutes(Map<String, ProxyRouteLocator.ProxyRouteSpec> routes) {
+    public void setRoutes(Map<String, ZuulProperties.ZuulRoute> routes) {
 
-        final Trie<ProxyRouteSpecEntry> trie = createTrie();
-        for (Map.Entry<String, ProxyRouteLocator.ProxyRouteSpec> route : routes.entrySet()) {
+        final Trie<ZuulRouteEntry> trie = createTrie();
+        for (Map.Entry<String, ZuulProperties.ZuulRoute> route : routes.entrySet()) {
             trie.put(
                     path(route.getKey()),
-                    new ProxyRouteSpecEntry(route.getKey(), route.getValue(), isWildcard(route.getKey()))
+                    new ZuulRouteEntry(route.getKey(), route.getValue(), isWildcard(route.getKey()))
             );
         }
         this.trie.lazySet(trie);
@@ -75,13 +75,13 @@ public class TrieRouteMatcher implements RouteMatcher {
      * {@inheritDoc}
      */
     @Override
-    public ProxyRouteLocator.ProxyRouteSpec getMatchingRoute(String path) {
-        final ProxyRouteSpecEntry matching = trie.get().prefix(path);
+    public ZuulProperties.ZuulRoute getMatchingRoute(String path) {
+        final ZuulRouteEntry matching = trie.get().prefix(path);
         if (matching == null
                 || !matching.isWildcard() && !matchesExact(path, matching.getPath())) {
             return null;
         } else {
-            return matching.getProxyRouteSpec();
+            return matching.getRoute();
         }
     }
 
@@ -124,7 +124,7 @@ public class TrieRouteMatcher implements RouteMatcher {
      *
      * @return the trie instance
      */
-    private Trie<ProxyRouteSpecEntry> createTrie() {
+    private Trie<ZuulRouteEntry> createTrie() {
         return trieSupplier.createTrie();
     }
 
@@ -133,7 +133,7 @@ public class TrieRouteMatcher implements RouteMatcher {
      *
      * @author Jakub Narloch
      */
-    private static class ProxyRouteSpecEntry {
+    private static class ZuulRouteEntry {
 
         /**
          * The route path.
@@ -143,7 +143,7 @@ public class TrieRouteMatcher implements RouteMatcher {
         /**
          * The route spec.
          */
-        private final ProxyRouteLocator.ProxyRouteSpec proxyRouteSpec;
+        private final ZuulProperties.ZuulRoute route;
 
         /**
          * Whether the route is a wildcard.
@@ -151,15 +151,15 @@ public class TrieRouteMatcher implements RouteMatcher {
         private final boolean wildcard;
 
         /**
-         * Creates new instance of {@link ProxyRouteSpecEntry}
+         * Creates new instance of {@link ZuulRouteEntry}
          *
          * @param path           the route path
-         * @param proxyRouteSpec the route spec
+         * @param route the zuul route
          * @param wildcard       whether the route is wildcard
          */
-        public ProxyRouteSpecEntry(String path, ProxyRouteLocator.ProxyRouteSpec proxyRouteSpec, boolean wildcard) {
+        public ZuulRouteEntry(String path, ZuulProperties.ZuulRoute route, boolean wildcard) {
             this.path = path;
-            this.proxyRouteSpec = proxyRouteSpec;
+            this.route = route;
             this.wildcard = wildcard;
         }
 
@@ -177,8 +177,8 @@ public class TrieRouteMatcher implements RouteMatcher {
          *
          * @return the route spec
          */
-        public ProxyRouteLocator.ProxyRouteSpec getProxyRouteSpec() {
-            return proxyRouteSpec;
+        public ZuulProperties.ZuulRoute getRoute() {
+            return route;
         }
 
         /**

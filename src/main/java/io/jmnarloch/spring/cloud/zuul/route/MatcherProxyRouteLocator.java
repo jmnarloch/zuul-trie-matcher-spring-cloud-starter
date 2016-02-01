@@ -21,9 +21,6 @@ import org.springframework.cloud.netflix.zuul.filters.ProxyRouteLocator;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.util.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
  * A simple implementation of {@link ProxyRouteLocator} that delegates to the {@link RouteMatcher} for retrieving the
  * best matching route for specified request path.
@@ -68,7 +65,13 @@ public class MatcherProxyRouteLocator extends ProxyRouteLocator {
      */
     @Override
     public ProxyRouteSpec getMatchingRoute(String path) {
-        return routeMatcher.getMatchingRoute(path);
+
+        if (StringUtils.hasText(this.servletPath) && !this.servletPath.equals("/")
+                && path.startsWith(this.servletPath)) {
+            path = path.substring(this.servletPath.length());
+        }
+
+        return toProxyRouteSpec(path, routeMatcher.getMatchingRoute(path));
     }
 
     /**
@@ -76,22 +79,7 @@ public class MatcherProxyRouteLocator extends ProxyRouteLocator {
      */
     @Override
     public void resetRoutes() {
-        routeMatcher.setRoutes(toProxyRouteSpec(locateRoutes()));
-    }
-
-    /**
-     * Creates a map of {@link org.springframework.cloud.netflix.zuul.filters.ProxyRouteLocator.ProxyRouteSpec} out of
-     * {@link org.springframework.cloud.netflix.zuul.filters.ZuulProperties.ZuulRoute}.
-     *
-     * @param routes the map of routes
-     * @return the corresponding map of route specs
-     */
-    private Map<String, ProxyRouteSpec> toProxyRouteSpec(Map<String, ZuulProperties.ZuulRoute> routes) {
-        final Map<String, ProxyRouteSpec> routeSpecs = new LinkedHashMap<String, ProxyRouteSpec>();
-        for (Map.Entry<String, ZuulProperties.ZuulRoute> route : routes.entrySet()) {
-            routeSpecs.put(route.getKey(), toProxyRouteSpec(route.getValue()));
-        }
-        return routeSpecs;
+        routeMatcher.setRoutes(locateRoutes());
     }
 
     /**
@@ -101,28 +89,31 @@ public class MatcherProxyRouteLocator extends ProxyRouteLocator {
      * @param route the zuul route
      * @return the route spec
      */
-    private ProxyRouteSpec toProxyRouteSpec(ZuulProperties.ZuulRoute route) {
+    private ProxyRouteSpec toProxyRouteSpec(final String path, final ZuulProperties.ZuulRoute route) {
+        if(route == null) {
+            return null;
+        }
 
-        String path = getRequestPath(route);
+        String targetPath = getRequestPath(path);
         String prefix = properties.getPrefix();
         final Boolean retryable = isRetryable(route);
 
-        if (properties.isStripPrefix() && path.startsWith(prefix)) {
-            path = path.substring(prefix.length());
+        if (properties.isStripPrefix() && targetPath.startsWith(prefix)) {
+            targetPath = path.substring(prefix.length());
         }
 
         if (route.isStripPrefix()) {
             int index = route.getPath().indexOf("*") - 1;
             if (index > 0) {
                 String routePrefix = route.getPath().substring(0, index);
-                path = path.replaceFirst(routePrefix, "");
+                targetPath = targetPath.replaceFirst(routePrefix, "");
                 prefix = prefix + routePrefix;
             }
         }
 
         return new ProxyRouteSpec(
                 route.getId(),
-                path,
+                targetPath,
                 route.getLocation(),
                 prefix,
                 retryable
@@ -145,11 +136,10 @@ public class MatcherProxyRouteLocator extends ProxyRouteLocator {
     /**
      * Retrieves the route path, stripped from the servlet path.
      *
-     * @param route the route path
+     * @param path the route path
      * @return the route request path
      */
-    private String getRequestPath(ZuulProperties.ZuulRoute route) {
-        final String path = route.getPath();
+    private String getRequestPath(String path) {
         if (StringUtils.hasText(this.servletPath) && !this.servletPath.equals("/")
                 && path.startsWith(this.servletPath)) {
             return path.substring(this.servletPath.length());
