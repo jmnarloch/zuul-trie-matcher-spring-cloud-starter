@@ -18,7 +18,7 @@ Add the Spring Cloud starter to your project:
 <dependency>
   <groupId>io.jmnarloch</groupId>
   <artifactId>zuul-trie-matcher-spring-cloud-starter</artifactId>
-  <version>1.1.2</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -71,6 +71,12 @@ Also the side effect of using the Trie is that it allows to define overlapping p
 As already stated the standard implementation would chose either of those paths depending on the order they have been
 defined in properties file, the Trie tree in contrary would find the best matching route i.e.
 for path /uaa/authorize, /uaa/** would be used and for /uaa/account/j.doe, /uaa/account/** is going to be matched.
+
+## Plans for version 2.x
+
+The Spring Cloud 1.1 will include some minimal integration for this project, allowing to remove unnecessary parts like
+the `@EnableZuulProxyMatcher` - that is only there to import the required classes, besides that I've also decided to
+extract the Trie implementation into separate component and continue the development separately: https://github.com/jmnarloch/trie
 
 ## License
 
